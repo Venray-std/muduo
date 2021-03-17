@@ -1,3 +1,8 @@
+/**
+ * @file HttpServer_test.cc
+ * @date 2021-03-11
+ * 测试server是否正常，可以通过访问0.0.0.0:8080判断
+ */
 #include "muduo/net/http/HttpServer.h"
 #include "muduo/net/http/HttpRequest.h"
 #include "muduo/net/http/HttpResponse.h"
@@ -13,7 +18,7 @@ using namespace muduo::net;
 extern char favicon[555];
 bool benchmark = false;
 
-void onRequest(const HttpRequest& req, HttpResponse* resp)
+void onRequest(const HttpRequest& req, HttpResponse* resp)  // request被封装到req中
 {
   std::cout << "Headers " << req.methodString() << " " << req.path() << std::endl;
   if (!benchmark)
@@ -25,7 +30,7 @@ void onRequest(const HttpRequest& req, HttpResponse* resp)
     }
   }
 
-  if (req.path() == "/")
+  if (req.path() == "/")  // 地址
   {
     resp->setStatusCode(HttpResponse::k200Ok);
     resp->setStatusMessage("OK");
@@ -72,11 +77,11 @@ int main(int argc, char* argv[])
   HttpServer server(&loop, InetAddress(8000), "dummy");
   server.setHttpCallback(onRequest);
   server.setThreadNum(numThreads);
-  server.start();
+  server.start(); // 开启server
   loop.loop();
 }
 
-char favicon[555] = {
+char favicon[555] = { // 以下是一张图片的二进制表示
   '\x89', 'P', 'N', 'G', '\xD', '\xA', '\x1A', '\xA',
   '\x0', '\x0', '\x0', '\xD', 'I', 'H', 'D', 'R',
   '\x0', '\x0', '\x0', '\x10', '\x0', '\x0', '\x0', '\x10',
